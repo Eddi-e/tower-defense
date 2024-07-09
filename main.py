@@ -62,20 +62,57 @@ class Path_rect(Game_rect):
     def __init__(self,size,top_left_corner_pos,order):
         Game_rect.__init__(self,size,top_left_corner_pos)
         self.order = order
-        self.colour = "black"
-    
-
+        self.colour = "gray"
+    def draw_path_top_bottom(self,surface):
+        pygame.draw.rect(surface,self.colour,self.rect,width=1)
+        #draws top line
+        pygame.draw.line(surface,"black",self.top_left_corner_pos,(self.top_left_corner_pos[0]+self.rect.size[0],self.top_left_corner_pos[1]),3)
+        #draws bottom line
+        pygame.draw.line(surface,"black",(self.top_left_corner_pos[0],self.top_left_corner_pos[1]+self.rect.size[1]),(self.top_left_corner_pos[0]+self.rect.size[0],self.top_left_corner_pos[1]+self.rect.size[1]),3)
+    def draw_path_left_right(self,surface):
+        pygame.draw.rect(surface,self.colour,self.rect,width=1)
+        #draws left line
+        pygame.draw.line(surface,"black",self.top_left_corner_pos,(self.top_left_corner_pos[0],self.top_left_corner_pos[1]+self.rect.size[1]),3)
+        #draws right lime
+        pygame.draw.line(surface,"black",(self.top_left_corner_pos[0]+self.rect.size[0],self.top_left_corner_pos[1]),(self.top_left_corner_pos[0]+self.rect.size[0],self.top_left_corner_pos[1]+self.rect.size[1]),3)
 
 def make_grid_rect(grid,size):
     starting_coord = (100,100)
-    rect = []
+    grid_rect = []
+    path_rect = []
     for row_num,row in enumerate(grid):
         for item_num,item in enumerate(row):
             if item == 0:
-                rect.append(Game_rect(size,(starting_coord[0]+size*item_num,starting_coord[1]+size*row_num)))
+                grid_rect.append(Game_rect(size,(starting_coord[0]+size*item_num,starting_coord[1]+size*row_num)))
             else:
-                rect.append(Path_rect(size,(starting_coord[0]+size*item_num,starting_coord[1]+size*row_num),item))
+                path_rect.append(Path_rect(size,(starting_coord[0]+size*item_num,starting_coord[1]+size*row_num),item))
+    rect = (grid_rect,path_rect)
     return (rect)
+
+def draw_rectangle(rectangle_grid,screen):
+    for rectangle in rectangle_grid:
+        rectangle.draw_rect(screen)
+
+def draw_path(path_grid,screen):
+    prev_coords = (-1,-1)
+    path_length_minus_one = len(path_grid)-1
+    for path_num,path in enumerate(path_grid):
+        path_corner = path.top_left_corner_pos
+        print(path_corner)
+        if path_num == 0:
+            next_path = path_grid[path_num+1]
+            next_path_coords = next_path.top_left_corner_pos
+            if path_corner[0] == 100:
+                pass
+            elif path_corner[0] == 460:
+                pass
+            elif path_corner[1] == 100:
+                pass
+            else:
+                pass
+        elif path_num == path_length_minus_one:
+            pass
+
 
 
 
@@ -108,10 +145,19 @@ def main():
     square_size = int(400/grid_size)
 
     screen.fill("white")
-    rectangle_grid = make_grid_rect(grid,square_size)
+    rectangle_grid_tuple = make_grid_rect(grid,square_size)
+    rectangle_grid = rectangle_grid_tuple[0]
+    path_grid = rectangle_grid_tuple[1]
+    sorted_path_grid = sorted(path_grid,key=lambda x: x.order)
 
     for rectangle in rectangle_grid:
         rectangle.draw_rect(screen)
+
+    for rectangle in sorted_path_grid:
+        rectangle.draw_path_left_right(screen)
+        print(rectangle.order)
+
+    draw_path(sorted_path_grid,screen)
 
     while running:
         #poll events here
