@@ -263,13 +263,9 @@ def main():
     path_grid = rectangle_grid_tuple[1]
     sorted_path_grid = sorted(path_grid,key=lambda x: x.order)
 
-    for rectangle in rectangle_grid:
-        rectangle.draw_rect(screen)
+    
 
-    for rectangle in sorted_path_grid:
- #        rectangle.draw_path_left_right(screen)
-        print(rectangle.order)
-
+    draw_rectangle(rectangle_grid,screen)
     draw_path(sorted_path_grid,screen)
 
     while running:
