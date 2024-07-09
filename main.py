@@ -57,6 +57,12 @@ class Game_rect():
         self.colour = "brown"
     def draw_rect(self,surface):
         pygame.draw.rect(surface,self.colour,self.rect)
+
+class Path_rect(Game_rect):
+    def __init__(self,size,top_left_corner_pos,order):
+        Game_rect.__init__(self,size,top_left_corner_pos)
+        self.order = order
+        self.colour = "black"
     
 
 
@@ -65,14 +71,17 @@ def make_grid_rect(grid,size):
     rect = []
     for row_num,row in enumerate(grid):
         for item_num,item in enumerate(row):
-            rect.append(Game_rect(size,(starting_coord[0]+starting_coord[0]*item_num,starting_coord[1]+starting_coord[1]*row_num)))
+            if item == 0:
+                rect.append(Game_rect(size,(starting_coord[0]+size*item_num,starting_coord[1]+size*row_num)))
+            else:
+                rect.append(Path_rect(size,(starting_coord[0]+size*item_num,starting_coord[1]+size*row_num),item))
     return (rect)
 
 
 
 
 def main():
-    grid_size = 6
+    grid_size = 10
     grid = make_grid(grid_size)
 
 
