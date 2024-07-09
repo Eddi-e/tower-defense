@@ -2,6 +2,7 @@
 
 import random
 import pygame
+import sys
 
 
 
@@ -226,8 +227,34 @@ def draw_path(path_grid,screen):
             
 
 
+class enemy():
+    def __init__(self,health,position,speed,size,goal,path):
+        self.path = path
+        self.health(health)
+        self.position = position
+        self.speed = speed
+        self.goal = goal
+        self.colour = "blue"
+        self.size = size
+        self.path = path
+        self.counter = 0
+
+    def move(self):
+        self.position[0] = self.position[0]+self.speed[0]
+        self.position[1] = self.position[1]+self.speed[1]
+        if self.position == self.goal:
+            self.find_new_speed()
+
+    
+    def find_new_speed(self):
+        if self.counter == len(self.path):
+            pass
 
 
+    
+    def draw(self,screen):
+        pygame.draw.circle(screen,self.colour,self.position,self.size)
+        
 
 
 def main():
@@ -256,6 +283,8 @@ def main():
     clock = pygame.time.Clock()
     running = True
     square_size = int(400/grid_size)
+    round_number = 0
+    font = pygame.font.SysFont('Arial',20)
 
     screen.fill("white")
     rectangle_grid_tuple = make_grid_rect(grid,square_size)
@@ -263,10 +292,13 @@ def main():
     path_grid = rectangle_grid_tuple[1]
     sorted_path_grid = sorted(path_grid,key=lambda x: x.order)
 
-    
+    print(sorted_path_grid)
 
     draw_rectangle(rectangle_grid,screen)
     draw_path(sorted_path_grid,screen)
+
+    font_screen = font.render("Round:   "+str(round_number),True,"black")
+    screen.blit(font_screen,(100,50))
 
     while running:
         #poll events here
