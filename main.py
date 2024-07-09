@@ -82,19 +82,25 @@ class Path_rect(Game_rect):
     def draw_path_top_right(self,surface):
         size_zero = self.rect.size[0]
         size_one = self.rect.size[1]
+        pygame.draw.rect(surface,self.colour,self.rect,width=1)
+
         pygame.draw.line(surface,"black",self.top_left_corner_pos,(self.top_left_corner_pos[0]+size_zero,self.top_left_corner_pos[1]),3)
         pygame.draw.line(surface,"black",(self.top_left_corner_pos[0]+size_zero,self.top_left_corner_pos[1]),(self.top_left_corner_pos[0]+size_zero,self.top_left_corner_pos[1]+size_one),3)
     def draw_path_top_left(self,surface):
+        pygame.draw.rect(surface,self.colour,self.rect,width=1)
         size_zero = self.rect.size[0]
         size_one = self.rect.size[1]
         pygame.draw.line(surface,"black",self.top_left_corner_pos,(self.top_left_corner_pos[0]+size_zero,self.top_left_corner_pos[1]),3)
         pygame.draw.line(surface,"black",self.top_left_corner_pos,(self.top_left_corner_pos[0],self.top_left_corner_pos[1]+size_one),3)
     def draw_path_bottom_left(self,surface):
+        pygame.draw.rect(surface,self.colour,self.rect,width=1)
+
         size_zero = self.rect.size[0]
         size_one = self.rect.size[1]
         pygame.draw.line(surface,"black",(self.top_left_corner_pos[0],self.top_left_corner_pos[1]+size_one),(self.top_left_corner_pos[0]+size_zero,self.top_left_corner_pos[1]+size_one),3)
         pygame.draw.line(surface,"black",self.top_left_corner_pos,(self.top_left_corner_pos[0],self.top_left_corner_pos[1]+size_one),3)
     def draw_path_bottom_right(self,surface):
+        pygame.draw.rect(surface,self.colour,self.rect,width=1)
         size_zero = self.rect.size[0]
         size_one = self.rect.size[1]
         pygame.draw.line(surface,"black",(self.top_left_corner_pos[0],self.top_left_corner_pos[1]+size_one),(self.top_left_corner_pos[0]+size_zero,self.top_left_corner_pos[1]+size_one),3)
@@ -128,15 +134,97 @@ def draw_path(path_grid,screen):
             next_path = path_grid[path_num+1]
             next_path_coords = next_path.top_left_corner_pos
             if path_corner[0] == 100:
-                pass
+                if next_path_coords[1] < path_corner[1]:
+                    path.draw_path_bottom_right(screen)
+                elif next_path_coords[1] > path_corner[1]:
+                    path.draw_path_top_right(screen)
+                else:
+                    path.draw_path_top_bottom(screen)
             elif path_corner[0] == 460:
-                pass
+                if next_path_coords[1] < path_corner[1]:
+                    path.draw_path_bottom_left(screen)
+                elif next_path_coords[1] > path_corner[1]:
+                    path.draw_path_top_left(screen)
+                else:
+                    path.draw_path_top_bottom(screen)
             elif path_corner[1] == 100:
-                pass
+                if next_path_coords[0] > path_corner[0]:
+                    path.draw_path_bottom_left(screen)
+                elif next_path_coords[0] < path_corner[0]:
+                    path.draw_path_bottom_right(screen)
+                else:
+                    path.draw_path_left_right(screen)
             else:
-                pass
+                if next_path_coords[0] > path_corner[0]:
+                    path.draw_path_top_left(screen)
+                elif next_path_coords[0] < path_corner[0]:
+                    path.draw_path_top_right(screen)
+                else:
+                    path.draw_path_left_right(screen)
         elif path_num == path_length_minus_one:
-            pass
+            if path_corner[0] == 100:
+                if path_corner[1] > prev_coords[1]:
+                    path.draw_path_bottom_right(screen)
+                elif path_corner[1] < prev_coords[1]:
+                    path.draw_path_top_right(screen)
+                else:
+                    path.draw_path_top_bottom(screen)
+            elif path_corner[0] == 460:
+                if path_corner[1] > prev_coords[1]:
+                    path.draw_path_bottom_left(screen)
+                elif path_corner[1] < prev_coords[1]:
+                    path.draw_path_top_left(screen)
+                else:
+                    path.draw_path_top_bottom(screen)
+            elif path_corner[1] == 100:
+                if  path_corner[0] < prev_coords[0]:
+                    path.draw_path_bottom_left(screen)
+                elif path_corner[0] > prev_coords[0]:
+                    path.draw_path_bottom_right(screen)
+                else:
+                    path.draw_path_left_right(screen)
+            else:
+                if path_corner[0] < prev_coords[0]:
+                    path.draw_path_top_left(screen)
+                elif path_corner[0] > prev_coords[0]:
+                    path.draw_path_top_right(screen)
+                else:
+                    path.draw_path_left_right(screen)
+        else:
+            next_path = path_grid[path_num+1]
+            next_path_coords = next_path.top_left_corner_pos
+            if prev_coords[0] < next_path_coords[0]:
+                if prev_coords[1] < next_path_coords[1]:
+                    if path_corner[1]>prev_coords[1]:
+                        path.draw_path_bottom_left(screen)
+                    else:
+                        path.draw_path_top_right(screen)
+                elif prev_coords[1] > next_path_coords[1]:
+                    if path_corner[1]<prev_coords[1]:
+                        path.draw_path_top_left(screen)
+                    else:
+                        path.draw_path_bottom_right(screen)
+                else:
+                    path.draw_path_top_bottom(screen)
+            elif prev_coords[0] > next_path_coords[0]:
+                if prev_coords[1] < next_path_coords[1]:
+                    if path_corner[1]>prev_coords[1]:
+                        path.draw_path_bottom_right(screen)
+                    else:
+                        path.draw_path_top_left(screen)
+                elif prev_coords[1] > next_path_coords[1]:
+                    if path_corner[1]<prev_coords[1]:
+                        path.draw_path_top_right(screen)
+                    else:
+                        path.draw_path_bottom_left(screen)
+                else:
+                    path.draw_path_top_bottom(screen)
+            else:
+                path.draw_path_left_right(screen)
+
+        prev_coords = path_corner
+            
+
 
 
 
@@ -179,7 +267,7 @@ def main():
         rectangle.draw_rect(screen)
 
     for rectangle in sorted_path_grid:
-        rectangle.draw_path_left_right(screen)
+ #        rectangle.draw_path_left_right(screen)
         print(rectangle.order)
 
     draw_path(sorted_path_grid,screen)
