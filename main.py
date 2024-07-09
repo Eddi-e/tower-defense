@@ -1,7 +1,8 @@
 
 
 import random
-from pprint import pprint
+import pygame
+
 
 
 def find_next_to(coord):
@@ -19,7 +20,7 @@ def find_path(grid_size,start,end):
     path_search = True
     path = [start]
     dead_end = []
-    while path_search == True:
+    while path_search:
         possible_next = find_next_to(path[-1])
         if end in possible_next:
             path_search = False
@@ -42,11 +43,33 @@ def get_start_and_end(grid_size):
     
     start = border_coords[random.randrange(0,len(border_coords))]
     end_check = True
-    while end_check == True:
+    while end_check:
         end = border_coords[random.randrange(0,len(border_coords))]
         if end != start:
             end_check = False
     return (start,end)
+
+
+class Game_rect():
+    def __init__(self,size,top_left_corner_pos):
+        self.rect = pygame.Rect(top_left_corner_pos[0],top_left_corner_pos[1],size,size)
+        self.top_left_corner_pos = top_left_corner_pos
+        self.colour = "brown"
+    def draw_rect(self,surface):
+        pygame.draw.rect(surface,self.colour,self.rect)
+    
+
+
+def make_grid_rect(grid,size):
+    starting_coord = (100,100)
+    rect = []
+    for row_num,row in enumerate(grid):
+        for item_num,item in enumerate(row):
+            rect.append(Game_rect(size,(starting_coord[0]+starting_coord[0]*item_num,starting_coord[1]+starting_coord[1]*row_num)))
+    return (rect)
+
+
+
 
 def main():
     grid_size = 6
@@ -67,6 +90,29 @@ def main():
         grid[coord[0]][coord[1]] = count+1
 
     print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in grid]))
+
+
+    pygame.init()
+    screen = pygame.display.set_mode((600, 600))
+    clock = pygame.time.Clock()
+    running = True
+    square_size = int(400/grid_size)
+
+    screen.fill("white")
+    rectangle_grid = make_grid_rect(grid,square_size)
+
+    for rectangle in rectangle_grid:
+        rectangle.draw_rect(screen)
+
+    while running:
+        #poll events here
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+        pygame.display.flip()
+        #render here
+        clock.tick(60)
+    pygame.quit()
 
     return 0
 
