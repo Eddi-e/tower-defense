@@ -79,6 +79,27 @@ class Path_rect(Game_rect):
         pygame.draw.line(surface,"black",self.top_left_corner_pos,(self.top_left_corner_pos[0],self.top_left_corner_pos[1]+size_one),3)
         #draws right lime
         pygame.draw.line(surface,"black",(self.top_left_corner_pos[0]+size_zero,self.top_left_corner_pos[1]),(self.top_left_corner_pos[0]+size_zero,self.top_left_corner_pos[1]+size_one),3)
+    def draw_path_top_right(self,surface):
+        size_zero = self.rect.size[0]
+        size_one = self.rect.size[1]
+        pygame.draw.line(surface,"black",self.top_left_corner_pos,(self.top_left_corner_pos[0]+size_zero,self.top_left_corner_pos[1]),3)
+        pygame.draw.line(surface,"black",(self.top_left_corner_pos[0]+size_zero,self.top_left_corner_pos[1]),(self.top_left_corner_pos[0]+size_zero,self.top_left_corner_pos[1]+size_one),3)
+    def draw_path_top_left(self,surface):
+        size_zero = self.rect.size[0]
+        size_one = self.rect.size[1]
+        pygame.draw.line(surface,"black",self.top_left_corner_pos,(self.top_left_corner_pos[0]+size_zero,self.top_left_corner_pos[1]),3)
+        pygame.draw.line(surface,"black",self.top_left_corner_pos,(self.top_left_corner_pos[0],self.top_left_corner_pos[1]+size_one),3)
+    def draw_path_bottom_left(self,surface):
+        size_zero = self.rect.size[0]
+        size_one = self.rect.size[1]
+        pygame.draw.line(surface,"black",(self.top_left_corner_pos[0],self.top_left_corner_pos[1]+size_one),(self.top_left_corner_pos[0]+size_zero,self.top_left_corner_pos[1]+size_one),3)
+        pygame.draw.line(surface,"black",self.top_left_corner_pos,(self.top_left_corner_pos[0],self.top_left_corner_pos[1]+size_one),3)
+    def draw_path_bottom_right(self,surface):
+        size_zero = self.rect.size[0]
+        size_one = self.rect.size[1]
+        pygame.draw.line(surface,"black",(self.top_left_corner_pos[0],self.top_left_corner_pos[1]+size_one),(self.top_left_corner_pos[0]+size_zero,self.top_left_corner_pos[1]+size_one),3)
+        pygame.draw.line(surface,"black",(self.top_left_corner_pos[0]+size_zero,self.top_left_corner_pos[1]),(self.top_left_corner_pos[0]+size_zero,self.top_left_corner_pos[1]+size_one),3)
+
 
 def make_grid_rect(grid,size):
     starting_coord = (100,100)
